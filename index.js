@@ -14,7 +14,7 @@ const MongoStore =  require('connect-mongo')(session);
 
 app.use(
   session({
-    secret: 'learnplanet',
+    secret: 'laundryhub',
     resave: false,
     saveUninitialized: false,
     store: new MongoStore({mongooseConnection : mongoose.connection})
