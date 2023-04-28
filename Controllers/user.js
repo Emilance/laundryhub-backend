@@ -1,98 +1,95 @@
-const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
+const  bcrypt = require("bcrypt")
+const { User } = require("../models/user")
+const { generateToken } = require("../utils/generateToken")
+
+
+const signUp = async (req, res) => {
+    //get andd validate user input
+    
+    const { email, password } = req.body
+    try {
+       if (!( password, email)) {
+        return  res.status(400).send("Kindly fill all required input")
+       }
+ 
+ 
+       //check if user already exist
+       const existingUser = await User.findOne({ email })
+       if (existingUser) {
+          console.log(existingUser)
+           res.status(409).json("User with this email already exist")
+       } else {
+ 
+ 
+          //Encrypt user password
+          const encryptedPassword = await bcrypt.hash(password, 10)
+ 
+          //add user to DB
+          const user = await User.create({
+             name: (req.body.name || "newUser" ),
+             email: email.toLowerCase(),
+             password: encryptedPassword,
+          })
+ 
+          //create a   token
+          const token = generateToken({
+            user_id: user._id,
+            email
+         })
+ 
+          user.token = token
+        
+ 
+          res.status(201).json({
+             user,
+             token,
+             message: "User created successfully",
+          })
+ 
+       }
+ 
+    } catch (error) {
+       res.json({
+          status: "FAILED",
+          message: error.message
+       })
+    }
+ }
+
+
+ 
+const login = async (req, res) => {
+    const { email, password } = req.body
+    try {
+       //validate
+       if (!(email && password)) {
+          res.status(400).send("Kindly fill all input")
+       }
+ 
+       //get user
+       const user = await User.findOne({ email })
+       if (user) {
+          if (await bcrypt.compare(password, user.password)) {
+             const token = generateToken( { user_id: user._id, email })
+             user.token = token
+             res.status(201).json({
+                user, token,
+                message: "Login Successfull",
+             })
+          } else {
+             res.status(400).send("password Incorrect")
+          }
+       } else {
+          res.status(404).send("No account with this email")
+       }
+    } catch (error) {
+       res.json({
+          status: "FAILED",
+          message: error.message
+       })
+    }
+ }
 
 
 
-app.post('/api/change-password', async (req, res) => {
-	const { token, newpassword: plainTextPassword } = req.body
-
-	if (!plainTextPassword || typeof plainTextPassword !== 'string') {
-		return res.json({ status: 'error', error: 'Invalid password' })
-	}
-
-	if (plainTextPassword.length < 5) {
-		return res.json({
-			status: 'error',
-			error: 'Password too small. Should be at least 6 characters'
-		})
-	}
-
-	try {
-		const user = jwt.verify(token, JWT_SECRET)
-
-		const _id = user.id
-
-		const password = await bcrypt.hash(plainTextPassword, 10)
-
-		await User.updateOne(
-			{ _id },
-			{
-				$set: { password }
-			}
-		)
-		res.json({ status: 'ok' })
-	} catch (error) {
-		console.log(error)
-		res.json({ status: 'error', error: ';))' })
-	}
-})
-
-app.post('/api/login', async (req, res) => {
-	const { username, password } = req.body
-	const user = await User.findOne({ username }).lean()
-
-	if (!user) {
-		return res.json({ status: 'error', error: 'Invalid username/password' })
-	}
-
-	if (await bcrypt.compare(password, user.password)) {
-		
-		const token = jwt.sign(
-			{
-				id: user._id,
-				username: user.username
-			},
-			JWT_SECRET
-		)
-
-		return res.json({ status: 'ok', data: token })
-	}
-
-	res.json({ status: 'error', error: 'Invalid username/password' })
-})
-
-app.post('/api/register', async (req, res) => {
-	const { username, password: plainTextPassword } = req.body
-
-	if (!username || typeof username !== 'string') {
-		return res.json({ status: 'error', error: 'Invalid username' })
-	}
-
-	if (!plainTextPassword || typeof plainTextPassword !== 'string') {
-		return res.json({ status: 'error', error: 'Invalid password' })
-	}
-
-	if (plainTextPassword.length < 5) {
-		return res.json({
-			status: 'error',
-			error: 'Password too small. Should be atleast 6 characters'
-		})
-	}
-
-	const password = await bcrypt.hash(plainTextPassword, 10)
-
-	try {
-		const response = await User.create({
-			username,
-			password
-		})
-		console.log('User created successfully: ', response)
-	} catch (error) {
-		if (error.code === 404) {
-			// duplicate key
-			return res.json({ status: 'error', error: 'Username already in use' })
-		}
-		throw error
-	}
-
-	res.json({ status: 'ok' })
-})
+ module.exports ={signUp , login}
