@@ -6,10 +6,15 @@ const passport = require("passport")
 const AuthRoute = require('./routes/auth').router
 const UserRouter = require("./routes/user").router
 const cors = require("cors")
-require('dotenv').config()
-require('./utils/passport-setup')
 const app = express()
 app.use(cors());
+
+require('dotenv').config()
+require('./utils/passport-setup')
+
+
+
+app.use(bodyParser.urlencoded({ extended : true}))
 app.use(bodyParser.json());
 const MongoStore =  require('connect-mongo')(session);
 
@@ -29,7 +34,6 @@ app.use(
 app.use(passport.initialize())
 app.use(passport.session())
 
-app.use(cors())
 
 
 //routes
@@ -43,19 +47,20 @@ const MONGO_URI =process.env.MONGO_URI
 
 
 
+
 mongoose.connect(MONGO_URI, {
     useNewUrlParser: true, 
-}).then(() => {
-    app.listen(PORT , ()=>{
-        console.log(`listening on port ${PORT}`)
- 
-      })
+  }).then(() => {
+  app.listen(PORT , ()=>{
+    console.log(`listening on port ${PORT}`)
+
+  })
 }).catch((err) => {
     console.log(err.message + "Errorrrrrrr")
 })
 
 
 app.get('/', (req, res) => {
-    res.render('Hello World!');
+    res.send('Hello World!');
   });
 

@@ -22,6 +22,12 @@ router.get("/failed", (req, res)=>{
 })
 
 router.get("/success", (req, res)=>{
+   //create a   token
+   const token = generateToken({
+    user_id: req._id,
+    email
+ })
+ console.log(req._id)
   res.send(req)
 })
 
