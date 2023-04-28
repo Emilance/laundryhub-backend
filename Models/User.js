@@ -11,11 +11,17 @@ const userSchema  = Schema({
     },
     password: {
         type: String
+    },
+    isGoogleLogin: {
+        type: Boolean
+    },
+    googleId: {
+        type:Number
     }
 })
 
 
 
-const User = mongoose.Model("User", userSchema)
+const User = mongoose.model("User", userSchema)
 
  module.exports =  {User}
