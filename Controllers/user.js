@@ -1,11 +1,6 @@
-<<<<<<< HEAD
 const JWT_SECRET = 'sdjkfh8923yhjdksbfma@#*(&@*!^#&@bhjb2qiuhesdbhjdsfg839ujkdhfjk'
 
-// mongoose.connect('mongodb://localhost:27017/login-app-db', {
-// 	useNewUrlParser: true,
-// 	useUnifiedTopology: true,
-// 	useCreateIndex: true
-// })
+
 
 app.post('/api/change-password', async (req, res) => {
 	const { token, newpassword: plainTextPassword } = req.body
@@ -101,10 +96,3 @@ app.post('/api/register', async (req, res) => {
 
 	res.json({ status: 'ok' })
 })
-=======
-
-
-const CreateUser = (req, res) => {
-    
-}
->>>>>>> e64636a049ffe6a90b3e9c40e9a048ecfc86d862
