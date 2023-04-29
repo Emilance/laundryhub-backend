@@ -5,6 +5,8 @@ const mongoose = require("mongoose")
 const passport = require("passport")
 const AuthRoute = require('./routes/auth').router
 const UserRouter = require("./routes/user").router
+const BookingRouter = require("./routes/bookings").router
+
 const cors = require("cors")
 const app = express()
 app.use(cors());
@@ -40,6 +42,8 @@ app.use(passport.session())
 
 app.use("/auth", AuthRoute)
 app.use("/user", UserRouter)
+app.use("/booking", BookingRouter)
+
 
 
 const PORT =  process.env.PORT  || 5000
