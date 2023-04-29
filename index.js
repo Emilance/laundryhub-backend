@@ -49,7 +49,7 @@ app.use("/booking", BookingRouter)
 const PORT =  process.env.PORT  || 5000
 const MONGO_URI =process.env.MONGO_URI
 
-
+console.log(MONGO_URI)
 
 
 mongoose.connect(MONGO_URI, {

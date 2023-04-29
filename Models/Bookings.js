@@ -18,6 +18,10 @@ const bookingSchema = new Schema({
   time: {
     type: String,
   },
+  status: {
+    type: String,
+    default: "not Paid"
+},
   paymentId: {
     type: String,
   }

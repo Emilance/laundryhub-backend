@@ -1,5 +1,5 @@
 const {Booking}  = require("../Models/Bookings");
-
+const {transporter} = require("../utils/nodemailer.config")
 
  const createBooking = async (req, res) => {
    const { service, date, time  } =  req.body
@@ -14,7 +14,13 @@ const {Booking}  = require("../Models/Bookings");
           time,
           user:  req.user.user_id
        });
-       console.log(newBooking)
+       const emailParam = {
+         email :req.user.email,
+         Id : req.user.user_id,
+         newBooking
+       }
+       const sentEmail = await sendEmail(emailParam)
+       console.log(sentEmail)
        res.status(201).json(newBooking);
      } catch (error) {
        res.status(400).send(error);
@@ -72,5 +78,34 @@ const getAllBookings = async (req, res) => {
   }
 }
 
+
+const sendEmail = async({email, Id, newBooking}) =>{
+  try {
+    const mailOptions = {
+      from: process.env.AUTH_EMAIL,
+      to: email,
+      subject: 'Thank you For Scheduling',
+      html: ` <p> You have just successfully add a new service to your schedules<p>
+        <p>below are the details<p>
+        <h3> service : ${newBooking.service} <h3>
+        <h3> date : ${newBooking.date} <h3>
+        <h3> time : ${newBooking.time} <h3>
+        <p> Note : No service will be render without payment</p>
+        <button> make Payment </button>  
+      `
+   }
+   
+   await transporter.sendMail(mailOptions);
+   return {
+      message: " Service booking confirmation  email sent",
+      data: {
+         userId: Id,
+         email
+      }}
+  } catch (error) {
+    res.status(500).send(error);
+
+  }
+}
 
 module.exports = { createBooking, getBookings, updateBooking, deleteBooking, getAllBookings}
