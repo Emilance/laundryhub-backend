@@ -6,6 +6,7 @@ const passport = require("passport")
 const AuthRoute = require('./routes/auth').router
 const UserRouter = require("./routes/user").router
 const BookingRouter = require("./routes/bookings").router
+const PaymentRouter = require("./routes/payment").router
 
 const cors = require("cors")
 const app = express()
@@ -43,6 +44,7 @@ app.use(passport.session())
 app.use("/auth", AuthRoute)
 app.use("/user", UserRouter)
 app.use("/booking", BookingRouter)
+app.use("/payment", PaymentRouter)
 
 
 
