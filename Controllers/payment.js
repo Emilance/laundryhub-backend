@@ -5,7 +5,6 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const makePayment = async (req, res) => {
   const { name, addressLine1, city, postalCode, state, country, description, amount, Id } = req.body;
 
- console.log(req.body)
  try {
      const session = await stripe.checkout.sessions.create({
        line_items: [
