@@ -12,12 +12,18 @@ router.get("/google",    passport.authenticate('google',  ['profile', 'email']  
 router.get("/google/callback",
     passport.authenticate('google', {failureRedirect: '/auth/failed' }),
     async (req, res) =>{
+      try {
         const token = await generateToken({
           user_id: req.user._id,
           email : req.user.email
        })
        await  res.cookie('token', token);
         res.redirect(process.env.CLIENT_URL)
+        
+      } catch (error) {
+        console.log(error)
+        res.status(400).send(error)
+      }
     }
 )
 
