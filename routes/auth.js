@@ -17,12 +17,16 @@ router.get("/google/callback",
           user_id: req.user._id,
           email : req.user.email
        })
-       console.log("the token is ", token)
-       res.cookie('token', token, {
-        httpOnly: true,
-        maxAge: 1000 * 60 * 60 * 24 // 1 day
-      });;
-      res.cookie("working", "this is working ooooo")
+const cookieOption = {
+  expires : new Date(
+    Date.now() + 90 * 24 * 60 * 60 * 1000
+  ),
+  httpOnly: true,
+ 
+}
+if (process.env.NODE_ENV == "production") cookieOption.secure = true
+
+       res.cookie('token', token, cookieOption);;
      res.redirect(process.env.CLIENT_URL)
         
       } catch (error) {
