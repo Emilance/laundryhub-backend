@@ -4,9 +4,11 @@ const session = require("express-session")
 const mongoose = require("mongoose")
 const passport = require("passport")
 const AuthRoute = require('./routes/auth').router
-const UserRouter = require("./routes/user").router
-const BookingRouter = require("./routes/bookings").router
-const PaymentRouter = require("./routes/payment").router
+const UserRoute = require("./routes/user").router
+const BookingRoute = require("./routes/bookings").router
+const PaymentRoute = require("./routes/payment").router
+const OrderRoute = require("./routes/order").router
+
 
 const cors = require("cors")
 const app = express()
@@ -42,9 +44,11 @@ app.use(passport.session())
 //routes
 
 app.use("/auth", AuthRoute)
-app.use("/user", UserRouter)
-app.use("/booking", BookingRouter)
-app.use("/payment", PaymentRouter)
+app.use("/user", UserRoute)
+app.use("/booking", BookingRoute)
+app.use("/payment", PaymentRoute)
+app.use("/order", OrderRoute)
+
 
 
 

@@ -5,7 +5,7 @@ const { verifyToken } = require("../Middleware/auth")
 const router = express.Router()
 
 router.post("/", verifyToken,  createBooking)
-router.get("/", verifyToken,  getAllBookings)
+router.get("/",  getAllBookings)
 
 router.get('/mybookings', verifyToken, getBookings)
 router.patch('/:bookingsId',verifyToken, updateBooking)

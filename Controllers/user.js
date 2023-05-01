@@ -1,4 +1,5 @@
 const  bcrypt = require("bcrypt")
+const res = require("express/lib/response")
 const { User } = require("../Models/User")
 const { generateToken } = require("../utils/generateToken")
 
@@ -91,5 +92,27 @@ const login = async (req, res) => {
  }
 
 
+ const getAllUsers = async (req, res ) => {
+    try {
+       const resp = await User.find()
+       res.status(200).send(resp)
+    } catch (error) {
+       res.status(400).send(error)
+    }
+ }
 
- module.exports ={signUp , login}
+
+ const deleteUser = async (req, res) => {
+   try {
+     const user = await User.findByIdAndDelete(req.params.userId);
+     if(!user) {
+       res.status(404).send("no user found")
+     }else{
+       res.status(200).send(user);
+     }
+   } catch (error) {
+     res.status(500).send(error);
+   }
+ }
+
+ module.exports ={signUp , login , getAllUsers, deleteUser}

@@ -20,7 +20,6 @@ const {transporter} = require("../utils/nodemailer.config")
          newBooking
        }
        const sentEmail = await sendEmail(emailParam)
-       console.log(sentEmail)
        res.status(201).json(newBooking);
      } catch (error) {
        res.status(400).send(error);

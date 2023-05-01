@@ -1,4 +1,5 @@
 const { Booking } = require("../Models/Bookings");
+const { Order } = require("../Models/Order");
 
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
@@ -23,47 +24,26 @@ const makePayment = async (req, res) => {
        success_url: `${process.env.CLIENT_URL}/payment-success`,
        cancel_url: `${process.env.CLIENT_URL}/myschedules`,
      });
-     
-     await Booking.findByIdAndUpdate(Id, { status:"Paid"})
-     res.send({url : session.url});
+     if(session){
+         await Booking.findByIdAndUpdate(Id, { status:"Paid"})
+         await Order.create({
+             booking : Id,
+             user :req.user.user_id,
+             paymentId: session.id,
+             service :description,
+             amount,
+         })
+         res.send({url : session.url});
+         
+     } else {
+         res.status(400).send("something went wrong")
+    }
    
      
  } catch (error) {
+   console.log(error)
      res.status(400).send(error)
  }
 }
 module.exports = { makePayment };
 
-// try {
-//   // Create a customer
-//   const customer = await stripe.customers.create({
-//     email: req.user.email,
-//     name,
-//     source:req.body.stripeToken,
-//     address: {
-//       line1: addressLine1,
-//       city,
-//       postal_code: postalCode,
-//       state,
-//       country
-//     }
-//   });
-
-//   // // Add a payment source to the customer
-//   // const card = await stripe.customers.createSource(customer.id, { source: stripeToken });
-
-//   // Charge the customer
-//   const charge = await stripe.charges.create({
-//     amount,
-//     description,
-//     currency: "USD",
-//     customer: customer.id,
-//   });
-
-//   console.log(charge);
-//   res.send("Success");
-
-// } catch (error) {
-//   console.log(error);
-//   res.status(400).send(error);
-// }
