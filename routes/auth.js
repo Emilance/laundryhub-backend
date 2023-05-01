@@ -17,7 +17,6 @@ router.get("/google/callback",
           user_id: req.user._id,
           email : req.user.email
        })
-       console.log("token generated", token)
        await  res.cookie('token', token);
         res.redirect(process.env.CLIENT_URL)
         

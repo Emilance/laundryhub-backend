@@ -8,6 +8,8 @@ const UserRoute = require("./routes/user").router
 const BookingRoute = require("./routes/bookings").router
 const PaymentRoute = require("./routes/payment").router
 const OrderRoute = require("./routes/order").router
+const cookieParser = require('cookie-parser');
+
 
 
 const cors = require("cors")
@@ -18,7 +20,7 @@ require('dotenv').config()
 require('./utils/passport-setup')
 
 
-
+app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended : true}))
 app.use(bodyParser.json());
 const MongoStore =  require('connect-mongo')(session);
