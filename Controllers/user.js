@@ -108,6 +108,7 @@ const login = async (req, res) => {
      if(!user) {
        res.status(404).send("no user found")
      }else{
+       
        res.status(200).send(user);
      }
    } catch (error) {
