@@ -17,17 +17,7 @@ router.get("/google/callback",
           user_id: req.user._id,
           email : req.user.email
        })
-const cookieOption = {
-  expires : new Date(
-    Date.now() + 90 * 24 * 60 * 60 * 1000
-  ),
-  sameSite : "none",
-  httpOnly: true,
- 
-}
-if (process.env.NODE_ENV == "production") cookieOption.secure = true
-
-       res.cookie('token', token, cookieOption);;
+       res.cookie('token', token);;
      res.redirect(process.env.CLIENT_URL)
         
       } catch (error) {
