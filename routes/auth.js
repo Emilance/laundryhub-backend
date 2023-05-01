@@ -17,7 +17,7 @@ router.get("/google/callback",
           user_id: req.user._id,
           email : req.user.email
        })
-       res.cookie('token', token,{ domain: 'https://laundryhubapi.onrender.com/' });;
+       res.cookie('token', token);;
      res.redirect(process.env.CLIENT_URL)
         
       } catch (error) {
