@@ -1,4 +1,4 @@
-const { Rating } = require("../Models/ratings")
+const { Rating } = require("../Models/Rating")
 
 
 

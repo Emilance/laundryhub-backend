@@ -1,5 +1,5 @@
 const { Order } = require("../Models/Order")
-const { Rating } = require("../Models/ratings")
+const { Rating } = require("../Models/Rating")
 const { transporter } = require("../utils/nodemailer.config")
 
 
