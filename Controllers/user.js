@@ -18,7 +18,7 @@ const signUp = async (req, res) => {
        const existingUser = await User.findOne({ email })
        if (existingUser) {
           console.log(existingUser)
-           res.status(409).json("User with this email already exist")
+          return  res.status(409).json("User with this email already exist")
        } else {
  
  
@@ -64,7 +64,7 @@ const login = async (req, res) => {
     try {
        //validate
        if (!(email && password)) {
-          res.status(400).send("Kindly fill all input")
+         return  res.status(400).send("Kindly fill all input")
        }
  
        //get user
@@ -73,15 +73,16 @@ const login = async (req, res) => {
           if (await bcrypt.compare(password, user.password)) {
              const token = generateToken( { user_id: user._id, email })
              user.token = token
-             res.status(201).json({
+             return    res.status(201).json({
                 user, token,
                 message: "Login Successfull",
              })
           } else {
-             res.status(400).send("password Incorrect")
-          }
+            return res.status(400).send("password Incorrect")
+             
+            }
        } else {
-          res.status(404).send("No account with this email")
+         return  res.status(404).send("No account with this email")
        }
     } catch (error) {
        res.json({
@@ -106,10 +107,10 @@ const login = async (req, res) => {
    try {
      const user = await User.findByIdAndDelete(req.params.userId);
      if(!user) {
-       res.status(404).send("no user found")
+      return  res.status(404).send("no user found")
      }else{
        
-       res.status(200).send(user);
+      return   res.status(200).send(user);
      }
    } catch (error) {
      res.status(500).send(error);
